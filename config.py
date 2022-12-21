@@ -1,3 +1,3 @@
 configs={
-    'model_path':'Embibert-finetuned-tavbert'
+    'model_path':'../../models/Embibert-finetuned-tavbert'
 }

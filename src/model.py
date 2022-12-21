@@ -1,5 +1,5 @@
 from transformers import pipeline
-from config import configs
+
 from src.strings import StringUtils
 import pandas as pd
 from tabulate import tabulate
@@ -13,12 +13,12 @@ mock=[
 
 class Model():
 
-    def __init__(self,model_path=''):
+    def __init__(self,model_path):
         self.model_path=model_path
 
     def calc(self,text,min_p=0.01):
-        print(text)
-        mlm=pipeline("fill-mask", model=configs['model_path'])
+
+        mlm=pipeline("fill-mask", model=self.model_path)
         preds=self._predict_all(mlm, text)
         splited_text=text.split('?')
         res=[]
@@ -32,7 +32,6 @@ class Model():
                     if pred['score']>min_p:
                         next_preds['predictions'].append({'value': pred['token'], 'p': round(pred['score'], 3)})
             res.append(next_preds)
-        print(res)
         return res
 
     def _predict_all(self,mlm, txt):
