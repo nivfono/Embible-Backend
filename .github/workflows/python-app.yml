@@ -14,7 +14,7 @@ permissions:
 jobs:
   build:
 
-    runs-on: bgu-vm
+    runs-on: self-hosted
 
     steps:
     - uses: actions/checkout@v3
