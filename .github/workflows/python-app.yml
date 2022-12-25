@@ -18,7 +18,3 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Run Flask app
-        run: |
-          export FLASK_APP=main.py
-          flask run --port=500
