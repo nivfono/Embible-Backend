@@ -6,13 +6,12 @@ from flask_cors import CORS
 #
 import config
 from src.ensamble import Ensamble
-from src.model.model import Model
-from config import configs
+from huggingface_hub import login
 app = Flask(__name__)
 CORS(app)
-# @app.route("/",methods=['GET'])
-# def hello_world():
-#     return render_template('index.html')
+
+
+login(config.configs['hf_token'])
 ens=Ensamble()
 @app.route("/calc",methods=['GET'])
 def calc():

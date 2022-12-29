@@ -1,5 +1,6 @@
 configs={
-    'word_model_path':'../../models/Embibert-finetuned-mbert',
-    'subword_model_path':'../../models/Embibert-finetuned-distilbert',
-    'char_model_path':'../../models/Embibert-finetuned-tavbert',
+    'word_model_path':'harelmx/Embibert-tavbert',
+    'subword_model_path':'harelmx/Embibert-tavbert',
+    'char_model_path':'harelmx/Embibert-tavbert',
+    'hf_token':'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'
 }
