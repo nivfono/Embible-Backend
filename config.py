@@ -1,6 +1,6 @@
 configs={
-    'word_model_path':'harelmx/Embibert-tavbert',
-    'subword_model_path':'harelmx/Embibert-tavbert',
-    'char_model_path':'harelmx/Embibert-tavbert',
+    'word_model_path':'Embible/distilBert-20-epochs',
+    'subword_model_path':'Embible/distilBert-20-epochs',
+    'char_model_path':'Embible/distilBert-20-epochs',
     'hf_token':'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'
 }
