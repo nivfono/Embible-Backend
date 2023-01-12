@@ -28,20 +28,20 @@ class Model():
         if '?' not in text:
             return [{'text' : text,'predictions':None}]
         # predict
-        preds = self.get_predictions(text)
+        preds = self._get_predictions(text)
 
         # split to parts so we can turn these parts to list of {'text': 'part', 'predictions': [...]}
         splited_text=re.split('(\?)',text)
         splited_text=[i for i in splited_text if i != '']
         tmp=[]
 
-        for i,t in enumerate(splited_text):
-            if splited_text[i-1]=='?' and t=='?':
-                continue
-            tmp.append(t)
-
-
-        splited_text=tmp
+        # for i,t in enumerate(splited_text):
+        #     if splited_text[i-1]=='?' and t=='?':
+        #         continue
+        #     tmp.append(t)
+        #
+        #
+        # splited_text=tmp
         # parsing the parts to {'text': 'part', 'predictions': [...]}
         res=[]
         pred_index=0
@@ -53,7 +53,7 @@ class Model():
             res.append(next_pred)
         return res
 
-    def get_predictions(self,text):
+    def _get_predictions(self,text):
         text=StringUtils.insert_masks(text)
         # tokenize input
         token_ids = self.tokenizer.encode(text, return_tensors='pt')
@@ -67,7 +67,7 @@ class Model():
         res = []
         for mask_index in masked_pos:
             mask_hidden_state = last_hidden_state[mask_index]
-            topk_predictions=torch.topk(mask_hidden_state, k=10, dim=0)
+            topk_predictions=torch.topk(mask_hidden_state, k=100, dim=0)
             topk_preds_idx = topk_predictions[1]
             predictions = [self.tokenizer.decode(i.item()).strip() for i in topk_preds_idx]
             predictions=[i.replace('##', '') for i in predictions]
@@ -82,7 +82,8 @@ class Model():
 
 
     # old implementation
-    def calc(self,text,min_p=0.01):
+
+    def get_sequential_preds(self,text,min_p=0.01):
         mlm=pipeline("fill-mask", model=self.model_path)
         preds=self._predict_all(mlm, text)
         splited_text=text.split('?')

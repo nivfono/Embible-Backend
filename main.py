@@ -14,4 +14,5 @@ def calc():
     args=request.args.to_dict()
     return jsonify(ens.predict(args['text']))
 
-app.run(host="0.0.0.0", port=443,debug=True,ssl_context='adhoc')
+# app.run(host="0.0.0.0", port=443,debug=True,ssl_context='adhoc')
+app.run(host="0.0.0.0", port=8000,debug=True)
