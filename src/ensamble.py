@@ -17,10 +17,13 @@ class Ensamble():
 
         res=[]
         for pred_index in range(len(self.word_model.predict(text))):
-            if self.last_word_model_preds[pred_index]['predictions']==None:
-                res.append(self.last_word_model_preds[pred_index])
-            else:
-                res.append(self._get_pred_by_type(pred_index))
+            try:
+                if self.last_word_model_preds[pred_index]['predictions']==None:
+                    res.append(self.last_word_model_preds[pred_index])
+                else:
+                    res.append(self._get_pred_by_type(pred_index))
+            except:
+                pass
         return list(filter(lambda x:x!=None,res))
 
 
