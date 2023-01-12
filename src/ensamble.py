@@ -11,9 +11,10 @@ class Ensamble():
 
     def predict(self,text):
         self.last_word_model_preds=self.word_model.predict(text)
-        self.last_subword_model_preds = self.subword_model.predict(text)
-        self.last_char_model_preds = self.char_model.predict(text)
         self.last_char_model_sequential_preds = self.char_model.get_sequential_preds(text)
+        self.last_subword_model_preds =  self.last_char_model_sequential_preds
+        self.last_char_model_preds = self.char_model.predict(text)
+
 
         res=[]
         for pred_index in range(len(self.word_model.predict(text))):
