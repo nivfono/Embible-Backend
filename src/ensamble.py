@@ -17,7 +17,10 @@ class Ensamble():
 
         res=[]
         for pred_index in range(len(self.word_model.predict(text))):
-            res.append(self._get_pred_by_type(pred_index))
+            if self.last_word_model_preds[pred_index]['predictions']==None:
+                res.append(self.last_word_model_preds[pred_index])
+            else:
+                res.append(self._get_pred_by_type(pred_index))
         return list(filter(lambda x:x!=None,res))
 
 
@@ -44,7 +47,7 @@ class Ensamble():
             return self._get_subword_prediction_at_index(pred_index)
 
     def _get_word_prediction_at_index(self,index):
-        # print(index,'word')
+        print(index,'word')
         preds=self.last_word_model_preds[index]['predictions']
         res_preds=[]
         word_len=self._get_this_word_length(index,self.last_word_model_preds)
@@ -56,10 +59,10 @@ class Ensamble():
             res_preds=self._get_sequentially_pred_at_index(index,word_len)
         return {'text':'?','predictions':res_preds}
     def _get_subword_prediction_at_index(self,index):
-        # print(index, 'subword')
+        print(index, 'subword')
         return self.last_subword_model_preds[index]
     def _get_char_prediction_at_index(self,index):
-        # print(index, 'char')
+        print(index, 'char')
         return self.last_char_model_preds[index]
 
     def _get_this_word_length(self,index,preds):
