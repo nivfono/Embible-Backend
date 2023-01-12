@@ -44,7 +44,7 @@ class Ensamble():
             return self._get_subword_prediction_at_index(pred_index)
 
     def _get_word_prediction_at_index(self,index):
-        print(index,'word')
+        # print(index,'word')
         preds=self.last_word_model_preds[index]['predictions']
         res_preds=[]
         word_len=self._get_this_word_length(index,self.last_word_model_preds)
@@ -56,10 +56,10 @@ class Ensamble():
             res_preds=self._get_sequentially_pred_at_index(index,word_len)
         return {'text':'?','predictions':res_preds}
     def _get_subword_prediction_at_index(self,index):
-        print(index, 'subword')
+        # print(index, 'subword')
         return self.last_subword_model_preds[index]
     def _get_char_prediction_at_index(self,index):
-        print(index, 'char')
+        # print(index, 'char')
         return self.last_char_model_preds[index]
 
     def _get_this_word_length(self,index,preds):
@@ -82,12 +82,6 @@ class Ensamble():
         return {'predictions':[{'value':res_txt,'p':round(avg_score,3)}],'text':res_txt}
 
     def _is_index_starts_a_word(self,pred_index):
-        if pred_index ==0:
-            before={'text': ' '}
-        else:
-            before=self.last_word_model_preds[pred_index-1]
-        if(before['text']!=' '):
-            return False
         for i in range(pred_index,len(self.last_word_model_preds)):
             if self.last_word_model_preds[i]['text']==' ':
                 break
