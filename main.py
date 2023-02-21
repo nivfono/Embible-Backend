@@ -8,11 +8,13 @@ from huggingface_hub import login
 app = Flask(__name__)
 CORS(app)
 login(config.configs['hf_token'])
+print('initializing ensemble models')
 ens=Ensamble()
+print('starting flask')
 @app.route("/calc",methods=['GET'])
 def calc():
-    args=request.args.to_dict()
-    return jsonify(ens.predict(args['text']))
+     args=request.args.to_dict()
+     return jsonify(ens.predict(args['text']).get_ui_format())
 
-# app.run(host="0.0.0.0", port=443,debug=True,ssl_context='adhoc')
-app.run(host="0.0.0.0", port=8000,debug=True)
+app.run(host="0.0.0.0", port=443,debug=True,ssl_context='adhoc') #server
+# app.run(host="0.0.0.0", port=8000,debug=True) #local
