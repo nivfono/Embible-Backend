@@ -7,16 +7,8 @@ from src.classes.text_part import TextPart
 from src.model.model import Model
 from src.strings import StringUtils
 
-mock=[
-            {'text' : 'בראשית ברא אלוהים את ','predictions':None},
-            {'text':'?','predictions':[{'value':'השמיים','p':0.8},{'value':'הידיים','p':0.1}]},
-            {'text': ' ואת הא', 'predictions': None},
-            {'text': '?', 'predictions': [{'value': 'ר', 'p': 0.86}, {'value': 'מ', 'p': 0.69}]},
-            {'text': 'ץ', 'predictions': None},
-        ]
-
 class StandardModel(Model):
-    def predict(self,text,min_p=0.01):
+    def predict(self,text:str, min_p : float =0.01):
         if '?' not in text:
             return [TextPart(text,None)]
         # predict
@@ -25,7 +17,6 @@ class StandardModel(Model):
         # split to parts so we can turn these parts to list of {'text': 'part', 'predictions': [...]}
         splited_text=re.split('(\?)',text)
         splited_text=[i for i in splited_text if i != '']
-
 
         res=[]
         pred_index=0

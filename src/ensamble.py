@@ -1,3 +1,5 @@
+from typing import List
+
 import config
 from src.classes.prediction import Prediction
 from src.classes.text_part import TextPart
@@ -15,7 +17,7 @@ class Ensamble():
         self.sequential_char_model = SequentialModel(config.configs['char_model_path'])
 
 
-    def predict(self,text,min_p=0.1):
+    def predict(self,text:str,min_p=0.1)->EnsembleResult:
         self.last_word_model_preds=self.word_model.predict(text,min_p)
         self.last_char_model_sequential_preds = self.sequential_char_model.predict(text,min_p)
         self.last_subword_model_preds =  self.subword_model.predict(text,min_p)
@@ -33,7 +35,7 @@ class Ensamble():
         return EnsembleResult(list(filter(lambda x:x!=None,res)))
 
 
-    def _get_pred(self,pred_index):
+    def _get_pred(self,pred_index:int):
         if(len(self.last_word_model_preds)<=pred_index):
             return
         # handle extreme points
@@ -43,7 +45,7 @@ class Ensamble():
         before,after=self._get_before_after(pred_index)
         return self._get_pred_by_type( before, after, pred_index)
 
-    def _get_before_after(self,pred_index):
+    def _get_before_after(self,pred_index:int):
         if pred_index ==0:
             before=TextPart(' ',None)
         else:
@@ -55,7 +57,7 @@ class Ensamble():
 
         return before,after
 
-    def _get_pred_by_type(self,before,after,pred_index):
+    def _get_pred_by_type(self,before:TextPart,after:TextPart,pred_index:int)->TextPart:
         if self._is_index_starts_a_word(pred_index):
             return self._get_word_prediction_at_index(pred_index)
         elif after.text[0]!=' ' and before.text[-1]!=' ':
@@ -63,7 +65,7 @@ class Ensamble():
         else:
             return self._get_subword_prediction_at_index(pred_index)
 
-    def _get_word_prediction_at_index(self,index):
+    def _get_word_prediction_at_index(self,index:int)->TextPart:
         preds=self.last_word_model_preds[index].predictions
         res_preds=[]
         word_len=self._get_this_word_length(index,self.last_word_model_preds)
@@ -75,7 +77,7 @@ class Ensamble():
             res_preds=self._get_sequentially_pred_at_index(index,word_len)
 
         return TextPart('?',res_preds)
-    def _get_subword_prediction_at_index(self,index):
+    def _get_subword_prediction_at_index(self,index:int)->TextPart:
         return self.last_subword_model_preds[index]
     def _get_char_prediction_at_index(self,index):
         return self.last_char_model_preds[index]
@@ -89,7 +91,7 @@ class Ensamble():
                 return count
         return count
 
-    def _get_sequentially_pred_at_index(self,index,word_len):
+    def _get_sequentially_pred_at_index(self,index:int,word_len:int)->List[Prediction]:
         preds=[pred.predictions[0] for pred in self.last_char_model_sequential_preds[index:index+word_len] 
                if pred.predictions !=None and pred.predictions!=[] ]
         if preds==[]:
@@ -102,13 +104,10 @@ class Ensamble():
         avg_score=pred_score_sum/len(preds)
         return [Prediction(res_txt,round(avg_score,3))]
 
-    def _is_index_starts_a_word(self,pred_index):
+    def _is_index_starts_a_word(self,pred_index:int)->bool:
         for i in range(pred_index,len(self.last_word_model_preds)):
             if self.last_word_model_preds[i].text==' ':
                 break
             if self.last_word_model_preds[i].text!='?':
                 return False
         return True
-    def _trim_folowing_q_marks(self,index,word_len):
-        for i in range(index,index+word_len):
-            self.last_word_model_preds.pop(index)

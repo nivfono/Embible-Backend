@@ -1,4 +1,5 @@
 import re
+from typing import List
 
 import pandas as pd
 from transformers import pipeline
@@ -11,7 +12,7 @@ from src.strings import StringUtils
 
 class SequentialModel(Model):
 
-    def predict(self,text,min_p=0.01):
+    def predict(self,text:str, min_p:float = 0.01)->List[TextPart]:
         mlm=pipeline("fill-mask", model=self.model_path)
         if '?' not in text:
             return [TextPart(text, None)]

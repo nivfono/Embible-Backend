@@ -1,6 +1,9 @@
 from abc import ABC
+from typing import List
 
 from transformers import AutoModelForMaskedLM, AutoTokenizer
+
+from src.classes.text_part import TextPart
 
 
 class Model(ABC):
@@ -9,5 +12,5 @@ class Model(ABC):
         self.model=AutoModelForMaskedLM.from_pretrained(model_path)
         self.tokenizer=AutoTokenizer.from_pretrained(model_path)
 
-    def predict(self,text,min_p):
+    def predict(self,text:str,min_p:float)->List[TextPart]:
         pass

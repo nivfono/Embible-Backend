@@ -6,5 +6,5 @@ class TextPart:
     def __str__(self):
         return f'{self.text} : {self.predictions}'
 
-    def is_only_text(self):
+    def is_only_text(self)->bool:
         return (self.predictions==None)
