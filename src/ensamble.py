@@ -23,7 +23,7 @@ class Ensamble():
 
         res=[]
         for pred_index in range(len(self.last_word_model_preds)):
-                if pred_index>len(self.last_word_model_preds):
+                if pred_index>=len(self.last_word_model_preds):
                     break
                 if self.last_word_model_preds[pred_index].is_only_text():
                     res.append(self.last_word_model_preds[pred_index])
